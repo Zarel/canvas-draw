@@ -69,21 +69,25 @@ class CanvasDraw {
         h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "black"}, [
           h('span', {className: 'color', style: {background: 'black', display: 'inline-block', width: '12px', height: '12px'}}),
         ]), " ",
-        h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "red"}, [
-          h('span', {className: 'color', style: {background: 'red', display: 'inline-block', width: '12px', height: '12px'}}),
+        h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "#F55252"}, [ // red
+          h('span', {className: 'color', style: {background: '#F55252', display: 'inline-block', width: '12px', height: '12px'}}),
         ]), " ",
-        h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "purple"}, [
-          h('span', {className: 'color', style: {background: 'purple', display: 'inline-block', width: '12px', height: '12px'}}),
+        h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "#F8BC01"}, [ // yellow
+          h('span', {className: 'color', style: {background: '#F8BC01', display: 'inline-block', width: '12px', height: '12px'}}),
         ]), " ",
-        h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "green"}, [
-          h('span', {className: 'color', style: {background: 'green', display: 'inline-block', width: '12px', height: '12px'}}),
+        h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "#3DC853"}, [ // green
+          h('span', {className: 'color', style: {background: '#3DC853', display: 'inline-block', width: '12px', height: '12px'}}),
         ]), " ",
-        h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "yellow"}, [
-          h('span', {className: 'color', style: {background: 'yellow', display: 'inline-block', width: '12px', height: '12px'}}),
+        h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "#42B0FF"}, [ // blue
+          h('span', {className: 'color', style: {background: '#42B0FF', display: 'inline-block', width: '12px', height: '12px'}}),
         ]), " ",
-        h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "brown"}, [
-          h('span', {className: 'color', style: {background: 'brown', display: 'inline-block', width: '12px', height: '12px'}}),
+        h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "#D512F9"}, [ // purple
+          h('span', {className: 'color', style: {background: '#D512F9', display: 'inline-block', width: '12px', height: '12px'}}),
         ]), " ",
+        h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "#8D6E63"}, [ // brown
+          h('span', {className: 'color', style: {background: '#8D6E63', display: 'inline-block', width: '12px', height: '12px'}}),
+        ]),
+        " | ",
         h<HTMLButtonElement>('button', {onclick: this.clickStrokeWidth, value: "1"}, [
           "Thin",
         ]), " ",
