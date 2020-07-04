@@ -50,9 +50,10 @@ class CanvasDraw {
   strokeColor = 'black';
 
   constructor(wrapper?: HTMLDivElement | null) {
-    if (wrapper && wrapper.offsetHeight > 2 && wrapper.offsetWidth > 2) {
-      this.w = Math.round(wrapper.offsetWidth * this.pixelRatio);
-      this.h = Math.round(wrapper.offsetHeight * this.pixelRatio);
+    if (wrapper && wrapper.dataset.dimensions) {
+      const [width, height] = wrapper.dataset.dimensions.split('x');
+      this.w = Math.round(parseInt(width) * this.pixelRatio);
+      this.h = Math.round(parseInt(height) * this.pixelRatio);
     }
     if (!wrapper) wrapper = document.createElement('div');
     wrapper.innerHTML = '';
@@ -98,7 +99,7 @@ class CanvasDraw {
           "Thick",
         ]), " ",
       ]),
-      h('div', {style: {width: styleWidth, height: styleHeight, border: `1px solid gray`}}, [
+      h('div', {style: {width: styleWidth, height: styleHeight, border: `1px solid gray`, boxSizing: `content-box`}}, [
         (this.drawingCanvas = h<HTMLCanvasElement>('canvas', {
           width: this.w,
           height: this.h,
