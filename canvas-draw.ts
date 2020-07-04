@@ -15,8 +15,12 @@ function h<T extends HTMLElement = HTMLElement>(
   tagName: string | T, attrs?: Omit<Partial<T>, 'style'> & {style?: Partial<T['style']>}, children?: (HTMLElement | string)[]
 ): T {
   const elem = typeof tagName === 'string' ? document.createElement(tagName) as T : tagName;
-  if (attrs) Object.assign(elem, attrs);
-  if (attrs && attrs.style) Object.assign(elem.style, attrs.style);
+  const style = attrs?.style;
+  if (attrs) {
+    delete attrs.style;
+    Object.assign(elem, attrs);
+  }
+  if (style) Object.assign(elem.style, style);
   if (children) for (const child of children) {
     elem.appendChild(typeof child === 'string' ? document.createTextNode(child) : child);
   }
