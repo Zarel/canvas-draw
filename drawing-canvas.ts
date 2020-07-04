@@ -54,7 +54,40 @@ class DrawingCanvas {
     const styleHeight = `${Math.round(this.h / this.pixelRatio)}px`;
 
     this.wrapper = h(wrapper, undefined, [
-      h<HTMLDivElement>('div', {style: {width: styleWidth, height: styleHeight, border: `1px solid gray`, marginBottom: '4px'}}, [
+      h('div', {className: 'top-controls', style: {marginBottom: '4px'}}, [
+        h<HTMLButtonElement>('button', {name: 'undo', onclick: this.undo}, ["Undo"]), " ",
+        h<HTMLButtonElement>('button', {name: 'clear', onclick: this.clear}, ["Clear"]),
+      ]),
+      h('div', {className: 'left-controls', style: {marginBottom: '4px'}}, [
+        h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "black"}, [
+          h('span', {className: 'color', style: {background: 'black', display: 'inline-block', width: '12px', height: '12px'}}),
+        ]), " ",
+        h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "red"}, [
+          h('span', {className: 'color', style: {background: 'red', display: 'inline-block', width: '12px', height: '12px'}}),
+        ]), " ",
+        h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "purple"}, [
+          h('span', {className: 'color', style: {background: 'purple', display: 'inline-block', width: '12px', height: '12px'}}),
+        ]), " ",
+        h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "green"}, [
+          h('span', {className: 'color', style: {background: 'green', display: 'inline-block', width: '12px', height: '12px'}}),
+        ]), " ",
+        h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "yellow"}, [
+          h('span', {className: 'color', style: {background: 'yellow', display: 'inline-block', width: '12px', height: '12px'}}),
+        ]), " ",
+        h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "brown"}, [
+          h('span', {className: 'color', style: {background: 'brown', display: 'inline-block', width: '12px', height: '12px'}}),
+        ]), " ",
+        h<HTMLButtonElement>('button', {onclick: this.clickStrokeWidth, value: "1"}, [
+          "Thin",
+        ]), " ",
+        h<HTMLButtonElement>('button', {onclick: this.clickStrokeWidth, value: "2"}, [
+          "Normal",
+        ]), " ",
+        h<HTMLButtonElement>('button', {onclick: this.clickStrokeWidth, value: "4"}, [
+          "Thick",
+        ]), " ",
+      ]),
+      h('div', {style: {width: styleWidth, height: styleHeight, border: `1px solid gray`}}, [
         (this.drawingCanvas = h<HTMLCanvasElement>('canvas', {
           width: this.w,
           height: this.h,
@@ -81,17 +114,13 @@ class DrawingCanvas {
           ontouchcancel: this.mouseup,
         })),
       ]),
-
-      h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "black"}, ["Black"]),
-      " ",
-      h<HTMLButtonElement>('button', {onclick: this.clickColor, value: "Red"}, ["Red"]),
-      " ",
-      h('button', {onclick: this.undo}, ["Undo"]),
     ]);
 
     this.interfaceContext = this.interfaceCanvas.getContext('2d')!;
     this.currentStrokeContext = this.currentStrokeCanvas.getContext('2d')!;
     this.drawingContext = this.drawingCanvas.getContext('2d')!;
+
+    this.updateButtons();
   }
 
   getPosition(ev: MouseEvent | TouchEvent): [number, number] {
@@ -127,7 +156,8 @@ class DrawingCanvas {
     this.drawStroke(this.currentStrokeContext, this.currentStroke);
   }
   redraw() {
-    this.drawingContext.clearRect(0, 0, this.w, this.h);
+    this.drawingContext.fillStyle = 'white';
+    this.drawingContext.fillRect(0, 0, this.w, this.h);
     for (const stroke of this.strokes) {
       this.drawStroke(this.drawingContext, stroke);
     }
@@ -153,16 +183,40 @@ class DrawingCanvas {
     this.currentStroke = null;
     this.drawingContext.drawImage(this.currentStrokeCanvas, 0, 0, this.w, this.h);
     this.currentStrokeContext.clearRect(0, 0, this.w, this.h);
+    this.updateButtons();
   }
 
+  updateButtons() {
+    const buttons = this.wrapper.getElementsByTagName('button');
+    for (const button of buttons as any as HTMLButtonElement[]) {
+      if (button.name === 'undo' || button.name === 'clear') {
+        button.disabled = !this.strokes.length;
+      } else {
+        button.disabled = (button.value === this.strokeColor || button.value === `${this.strokeWidth}`);
+      }
+    }
+  }
   clickColor = (ev: Event) => {
     const value = (ev.currentTarget as HTMLButtonElement).value;
     this.strokeColor = value;
+    this.updateButtons();
+  };
+  clickStrokeWidth = (ev: Event) => {
+    const value = (ev.currentTarget as HTMLButtonElement).value;
+    this.strokeWidth = parseInt(value);
+    this.updateButtons();
   };
   undo = () => {
     if (!this.strokes.length) return;
     this.strokes.pop();
     this.redraw();
+    this.updateButtons();
+  }
+  clear = () => {
+    if (!this.strokes.length) return;
+    this.strokes = [];
+    this.redraw();
+    this.updateButtons();
   }
   mousedown = (ev: MouseEvent | TouchEvent) => {
     ev.preventDefault();
