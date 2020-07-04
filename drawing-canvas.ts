@@ -33,7 +33,7 @@ class DrawingCanvas {
   drawingContext: CanvasRenderingContext2D;
 
   strokes: Stroke[] = [];
-  currentStroke: [number, number][] | null = null;
+  currentStroke: Stroke | null = null;
 
   w = 320;
   h = 320;
@@ -122,11 +122,7 @@ class DrawingCanvas {
     this.currentStrokeContext.clearRect(0, 0, this.w, this.h);
 
     if (!this.currentStroke) return;
-    this.drawStroke(this.currentStrokeContext, {
-      points: this.currentStroke,
-      color: this.strokeColor,
-      width: this.strokeWidth,
-    });
+    this.drawStroke(this.currentStrokeContext, this.currentStroke);
   }
   redraw() {
     this.drawingContext.clearRect(0, 0, this.w, this.h);
@@ -151,11 +147,7 @@ class DrawingCanvas {
   }
   commitStroke() {
     if (!this.currentStroke) return;
-    this.strokes.push({
-      points: this.currentStroke,
-      color: this.strokeColor,
-      width: this.strokeWidth,
-    });
+    this.strokes.push(this.currentStroke);
     this.currentStroke = null;
     this.drawingContext.drawImage(this.currentStrokeCanvas, 0, 0, this.w, this.h);
     this.currentStrokeContext.clearRect(0, 0, this.w, this.h);
@@ -173,20 +165,25 @@ class DrawingCanvas {
   mousedown = (ev: MouseEvent | TouchEvent) => {
     ev.preventDefault();
     const [x, y] = this.getPosition(ev);
-    this.currentStroke = [[x, y]];
+    this.currentStroke = {
+      points: [[x, y]],
+      color: this.strokeColor,
+      width: this.strokeWidth,
+    };
     this.draw(x, y);
   };
   mousemove = (ev: MouseEvent | TouchEvent) => {
     const [x, y] = this.getPosition(ev);
     if (this.currentStroke) {
-      this.currentStroke.push([x, y]);
+      this.currentStroke.points.push([x, y]);
     }
     this.draw(x, y);
   };
   mouseup = (ev: MouseEvent | TouchEvent) => {
     if (this.currentStroke) {
-      this.commitStroke();
       const [x, y] = this.getPosition(ev);
+      this.currentStroke.points.push([x, y]);
+      this.commitStroke();
       this.draw(x, y);
     }
   };
