@@ -20,7 +20,7 @@ function h<T extends HTMLElement = HTMLElement>(
   return elem;
 }
 
-class DrawingCanvas {
+class CanvasDraw {
   wrapper: HTMLDivElement;
 
   /** mostly just holds the cursor */

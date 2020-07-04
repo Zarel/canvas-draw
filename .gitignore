@@ -1,4 +1,4 @@
 node_modules
 package-lock.json
-drawing-canvas.js
-drawing-canvas.js.map
+canvas-draw.js
+canvas-draw.js.map
