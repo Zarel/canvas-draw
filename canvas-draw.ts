@@ -1,5 +1,8 @@
 /**
  * Drawing canvas
+ *
+ * @author Guangcong Luo <guangcongluo@gmail.com>
+ * @license MIT
  */
 
 interface Stroke {
