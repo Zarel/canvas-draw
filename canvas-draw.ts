@@ -132,6 +132,7 @@ class CanvasDraw {
     this.drawingContext = this.drawingCanvas.getContext('2d')!;
 
     this.updateButtons();
+    this.redraw();
   }
 
   getPosition(ev: MouseEvent | TouchEvent): [number, number] {
@@ -154,7 +155,7 @@ class CanvasDraw {
   draw(x: number, y: number) {
     // draw cursor
     this.interfaceContext.clearRect(0, 0, this.w, this.h);
-    this.interfaceContext.lineWidth = 1;
+    this.interfaceContext.lineWidth = this.pixelRatio;
     this.interfaceContext.strokeStyle = 'gray';
     this.interfaceContext.beginPath();
     this.interfaceContext.arc(x, y, this.strokeWidth * this.pixelRatio, 0, Math.PI * 2);
