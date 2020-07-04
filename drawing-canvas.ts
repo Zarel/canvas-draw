@@ -35,22 +35,23 @@ class DrawingCanvas {
   strokes: Stroke[] = [];
   currentStroke: Stroke | null = null;
 
-  w = 320;
-  h = 320;
+  pixelRatio = window.devicePixelRatio || 1;
+  w = 320 * this.pixelRatio;
+  h = 320 * this.pixelRatio;
 
   strokeWidth = 2;
   strokeColor = 'black';
 
   constructor(wrapper?: HTMLDivElement | null) {
     if (wrapper && wrapper.offsetHeight > 2 && wrapper.offsetWidth > 2) {
-      this.w = Math.round(wrapper.offsetWidth);
-      this.h = Math.round(wrapper.offsetHeight);
+      this.w = Math.round(wrapper.offsetWidth * this.pixelRatio);
+      this.h = Math.round(wrapper.offsetHeight * this.pixelRatio);
     }
     if (!wrapper) wrapper = document.createElement('div');
     wrapper.innerHTML = '';
 
-    const styleWidth = `${this.w}px`;
-    const styleHeight = `${this.h}px`;
+    const styleWidth = `${Math.round(this.w / this.pixelRatio)}px`;
+    const styleHeight = `${Math.round(this.h / this.pixelRatio)}px`;
 
     this.wrapper = h(wrapper, undefined, [
       h<HTMLDivElement>('div', {style: {width: styleWidth, height: styleHeight, border: `1px solid gray`, marginBottom: '4px'}}, [
@@ -106,7 +107,8 @@ class DrawingCanvas {
       y = touches[0].clientY;
     }
 
-    return [x - rect.left, y - rect.top];
+    // It's impossible to get the actual coordinates on a Retina screen, so we have to approximate
+    return [(x - rect.left) * this.pixelRatio, (y - rect.top) * this.pixelRatio];
   }
 
   draw(x: number, y: number) {
@@ -115,7 +117,7 @@ class DrawingCanvas {
     this.interfaceContext.lineWidth = 1;
     this.interfaceContext.strokeStyle = 'gray';
     this.interfaceContext.beginPath();
-    this.interfaceContext.arc(x, y, this.strokeWidth, 0, Math.PI * 2);
+    this.interfaceContext.arc(x, y, this.strokeWidth * this.pixelRatio, 0, Math.PI * 2);
     this.interfaceContext.stroke();
 
     // current stroke
@@ -132,7 +134,7 @@ class DrawingCanvas {
   }
   drawStroke(context: CanvasRenderingContext2D, stroke: Stroke) {
     context.strokeStyle = stroke.color;
-    context.lineWidth = stroke.width * 2;
+    context.lineWidth = stroke.width * 2 * this.pixelRatio;
     context.lineCap = 'round';
     context.lineJoin = 'round';
 
