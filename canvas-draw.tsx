@@ -61,7 +61,7 @@ class CanvasDraw {
       this.w = Math.round(parseInt(width) * this.pixelRatio);
       this.h = Math.round(parseInt(height) * this.pixelRatio);
     }
-    if (!wrapper) wrapper = document.createElement('div');
+    if (!wrapper) wrapper = <div></div>;
     wrapper.innerHTML = '';
 
     const styleWidth = `${Math.round(this.w / this.pixelRatio)}px`;
